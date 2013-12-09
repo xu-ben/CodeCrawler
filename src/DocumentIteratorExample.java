@@ -15,7 +15,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
  
 /**
- * @author mylxiaoyi
+ * @author Administrator
  *
  */
 public class DocumentIteratorExample {
@@ -24,7 +24,6 @@ public class DocumentIteratorExample {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
  
 		if(args.length != 1) {
 			System.err.println("Usage: java DocumentIteratorExample input-URL");
