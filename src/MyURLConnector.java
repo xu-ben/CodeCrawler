@@ -6,6 +6,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Matcher;
@@ -25,6 +26,13 @@ public final class MyURLConnector {
 	 * 全局唯一实例
 	 */
 	private static MyURLConnector conn = null;
+
+	/**
+	 * 微信浏览器的User-Agent
+	 */
+	private static String microAgentstr = "Mozilla/5.0 (Linux; U; Android 4.1.1; zh-cn; MI2 Build/JRO03L) AppleWebKit/534.30 (KHTML, like Gecko) version/4.0 Mobile Safari/534.30 MicroMessenger/5.0.3.1.355";
+	
+//	private static String microAgentstr = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_3 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Mobile/10B329 MicroMessenger/5.0.1";
 
 	private MyURLConnector() {
 	}
@@ -95,6 +103,18 @@ public final class MyURLConnector {
 		URL url = new URL(urlstr);
 		String encoding = getEncodingName(url);
 		URLConnection uc = url.openConnection();
+		return getContent(uc, encoding);
+	}
+	
+	/**
+	 * 给定一个url连接，返回其内容
+	 * @param uc
+	 * @param encoding
+	 * @return
+	 * @throws IOException
+	 */
+	public String getContent(URLConnection uc, String encoding) throws IOException {
+		uc.connect();
 		InputStreamReader isr = null;
 		if (encoding != null) {
 			isr = new InputStreamReader(uc.getInputStream(), encoding);
@@ -140,8 +160,27 @@ public final class MyURLConnector {
 		return conn;
 	}
 
+	public static void test2() throws Exception {
+		MyURLConnector muc = new MyURLConnector();
+//		String urlstr = "http://www.baidu.com";
+		String urlstr = "http://hd.weixin.kongzhong.com/index.php?g=Wap&m=Guajiang&a=index&token=xsubpm1404353542&wecha_id=ocXrWjm2dEKJ1qPkhq2L9wZ1KQ20&id=58";
+//		String urlstr = "http://acm.bjfu.edu.cn/ben/test.jsp";
+		URL url = new URL(urlstr);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestProperty("User-Agent", microAgentstr);
+		con.connect();
+		System.out.println(muc.getContent(con, "utf-8"));
+	}
+
 	public static void main(String[] args) {
-		test();
+		//test();
+		
+		try {
+			test2();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
